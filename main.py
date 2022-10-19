@@ -21,6 +21,9 @@ def get_bands():
 
 def get_band_events(band):
     """Call the Ticketmaster API and get a list of results from a search."""
+    if requests.get(TICKETMASTER_URL).reason == 'Unauthorized':
+        print('Please check your API key!')
+        return []
     return requests.get(f'{TICKETMASTER_URL}&keyword={band}').json()
 
 def check_band_events(events, band):
@@ -59,6 +62,8 @@ This may lag your browser or computer if you have a lot of bands or results!\n')
     for band in bands:
         encoded_band = urllib.parse.quote(band)
         band_events = get_band_events(encoded_band)
+        if band_events == []:  # If request is Unauthorized, don't process further
+            break
         all_valid_events += check_band_events(band_events, band)
 
     all_valid_events = sorted(set(all_valid_events))
