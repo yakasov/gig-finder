@@ -8,16 +8,16 @@ HOME_CURRENCY = 'GBP'
 
 def get_api_key():
     """Get Ticketmaster API key from ticketmaster_key. Get your own!"""
-    with open('ticketmaster_key', 'r', encoding='utf-8') as f:
-        return f.read()
+    with open('ticketmaster_key', 'r', encoding='utf-8') as file:
+        return file.read()
 
 API_KEY = get_api_key()
 TICKETMASTER_URL = f'https://app.ticketmaster.com/discovery/v2/events.json?apikey={API_KEY}'
 
 def get_bands():
     """Get bands from band_list.txt, one band per line."""
-    with open('band_list.txt', 'r', encoding='utf-8') as f:
-        return f.read().split('\n')
+    with open('band_list.txt', 'r', encoding='utf-8') as file:
+        return file.read().split('\n')
 
 def get_band_events(band):
     """Call the Ticketmaster API and get a list of results from a search."""
@@ -39,7 +39,7 @@ def check_band_events(events, band):
 def band_present(event, band):
     """Check that a band is actually attending, since the event name is not a sure indicator."""
     for attendee in event['_embedded']['attractions']:
-        if band == attendee['name']:  # Sometimes returns false positives?
+        if band.lower() == attendee['name'].lower():  # Sometimes returns false positives?
             return True
     return False
 
