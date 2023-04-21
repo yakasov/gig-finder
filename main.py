@@ -34,7 +34,7 @@ def check_band_events(events, band):
             try:
                 if event['priceRanges'][0]['currency'] == HOME_CURRENCY and \
                     band_present(event, band):
-                    valid_events.append(event['url'])
+                    valid_events.append(f"{band} - {event['url']}")
             except KeyError:
                 pass
     return valid_events
@@ -46,10 +46,10 @@ def band_present(event, band):
             return True
     return False
 
-def open_events(urls):
+def open_events(events):
     """If the user chooses, open the output results in a browser. One tab per URL."""
-    webbrowser.open_new('localhost')  # If possible, try and open a new window first for management
-    for url in urls:
+    for event in events:
+        url = event.split(" - ")[1]
         webbrowser.open(url, new=0, autoraise=False)
 
 def main():
@@ -70,8 +70,7 @@ This may lag your browser or computer if you have a lot of bands or results!\n')
 
     if browser_open_choice == 'Y':
         open_events(all_valid_events)
-    else:
-        for url in all_valid_events:
-            print(url)
+    for event in all_valid_events:
+        print(event)
 
 main()
